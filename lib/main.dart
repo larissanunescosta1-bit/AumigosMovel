@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/TelaDois.dart';
 import 'package:flutter_application_1/screens/TelaHome.dart';
 import 'splash_screen.dart';
-import 'categoria_widget.dart';
+
 
 void main() {
   runApp(MyApp());
