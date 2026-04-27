@@ -22,7 +22,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
+  int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +33,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: _bottomNavigationBar(),
     );
   }
+
   List<Widget> _screens = [
     new TelaHome(title: 'Primeira tela'),
     new TelaDois(title: 'Segunda tela'),
