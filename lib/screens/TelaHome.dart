@@ -302,7 +302,7 @@ class _TelaHomeState extends State<TelaHome> {
                               SizedBox(height: 10),
 
                               Text(
-                                "Lacinho",
+                                "Roupinha",
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
 
