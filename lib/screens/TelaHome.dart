@@ -288,7 +288,7 @@ class _TelaHomeState extends State<TelaHome> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text("Lacinhos"),
+                          title: Text("Roupinha"),
 
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
