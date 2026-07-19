@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'main.dart'; // importa o meu main HomePage
+import 'package:flutter_application_1/controlador/listaProdutoController.dart';
+import 'package:flutter_application_1/modelo/classes/lista_produtos.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -11,14 +13,22 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    });
+     iniciarApp();
   }
+     Future<void> iniciarApp() async {
+
+  await ListaProdutoController.inicializarProdutos(listaProdutos);
+
+  await Future.delayed(Duration(seconds: 3));
+
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => HomePage(),
+    ),
+  );
+
+}
+  
 
   @override
   Widget build(BuildContext context) {

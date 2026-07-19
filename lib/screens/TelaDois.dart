@@ -45,7 +45,7 @@ class _TelaDoisState extends State<TelaDois> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: Text("Lacinhos"),
+                    title: Text("Bandana"),
 
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -189,7 +189,7 @@ class _TelaDoisState extends State<TelaDois> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: Text("Bandana"),
+                    title: Text("Lacinho Rosa"),
 
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
