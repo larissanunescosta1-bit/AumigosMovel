@@ -1,5 +1,6 @@
 import 'produto.dart';
 import 'package:flutter_application_1/modelo/local_storage_service.dart';
+
 List<Produto> listaProdutos = [
   Produto(
     id: 1,
@@ -25,16 +26,12 @@ List<Produto> listaProdutos = [
     descricao: "O lacinho mais fofo. TAM: Pequeno",
   ),
 ];
+List<Produto> listaFavoritos = [];
 
-
- Future<void> inicializarProdutos(List<Produto> produtos) async {
-
+Future<void> inicializarProdutos(List<Produto> produtos) async {
   List<Produto> lista = await LocalStorageService.carregarProdutos();
 
-  if(lista.isEmpty){
-
+  if (lista.isEmpty) {
     await LocalStorageService.salvarProdutos(produtos);
-
   }
-
 }
