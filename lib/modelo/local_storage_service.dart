@@ -26,4 +26,30 @@ class LocalStorageService {
     return Produto.decode(produtosJson);
   }
 
+
+static const String LISTA_FAVORITOS = "favoritos";
+
+static Future<void> salvarFavoritos(List<Produto> favoritos) async {
+  final prefs = await SharedPreferences.getInstance();
+
+  prefs.setString(
+    LISTA_FAVORITOS,
+    Produto.encode(favoritos),
+  );
+}
+
+static Future<List<Produto>> carregarFavoritos() async {
+  final prefs = await SharedPreferences.getInstance();
+
+  String? json = prefs.getString(LISTA_FAVORITOS);
+
+  if (json == null) {
+    return [];
+  }
+
+  return Produto.decode(json);
+}
+
+
+
 }

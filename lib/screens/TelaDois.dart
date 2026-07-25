@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_application_1/modelo/classes/lista_produtos.dart';
 import 'package:flutter_application_1/modelo/classes/produto.dart';
+import 'package:flutter_application_1/modelo/local_storage_service.dart';
 
 class TelaDois extends StatefulWidget {
   const TelaDois({super.key, required this.title});
@@ -142,6 +143,8 @@ class _TelaDoisState extends State<TelaDois> {
                               listaFavoritos.remove(produto);
                               listaProdutos.add(produto);
                             });
+                            LocalStorageService.salvarProdutos(listaProdutos);
+                            LocalStorageService.salvarFavoritos(listaFavoritos);
                           },
                         ),
                       ],

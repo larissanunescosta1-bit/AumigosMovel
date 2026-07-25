@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_application_1/modelo/classes/lista_produtos.dart';
 import 'package:flutter_application_1/modelo/classes/produto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_application_1/modelo/local_storage_service.dart';
 
 class TelaHome extends StatefulWidget {
   const TelaHome({super.key, required this.title});
@@ -19,6 +21,18 @@ class _TelaHomeState extends State<TelaHome> {
     super.initState();
 
     produtos = listaProdutos;
+    LocalStorageService.carregarProdutos().then((lista) {
+      setState(() {
+        produtos = lista;
+      });
+    });
+
+    LocalStorageService.carregarFavoritos().then((lista) {
+      setState(() {
+        listaFavoritos.clear();
+        listaFavoritos.addAll(lista);
+      });
+    });
   }
 
   @override
@@ -268,9 +282,11 @@ class _TelaHomeState extends State<TelaHome> {
                           ),
                           onPressed: () {
                             setState(() {
-                              listaProdutos.remove(produto);
+                              produtos.remove(produto);
                               listaFavoritos.add(produto);
                             });
+                            LocalStorageService.salvarProdutos(listaProdutos);
+                            LocalStorageService.salvarFavoritos(listaFavoritos);
                           },
                         ),
                       ],

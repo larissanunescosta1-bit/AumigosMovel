@@ -9,16 +9,23 @@ class Produto {
   bool favorito;
 
   //construtor da classe que recer cada um de seus atributos
-  Produto({required this.id, required this.nome,  required this.preco,required this.imagem ,required this.descricao,this.favorito = false,});
+  Produto({
+    required this.id,
+    required this.nome,
+    required this.preco,
+    required this.imagem,
+    required this.descricao,
+    this.favorito = false,
+  });
 
   // Converte o objeto para um Map
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'nome': nome,
-       'preco': preco,
+      'preco': preco,
       'imagem': imagem,
-       'descricao': descricao,
+      'descricao': descricao,
       'favorito': favorito,
     };
   }
@@ -28,7 +35,7 @@ class Produto {
     return Produto(
       id: map['id'] ?? '',
       nome: map['nome'] ?? '',
-        preco: (map['preco'] ?? 0.0).toDouble(),
+      preco: (map['preco'] ?? 0.0).toDouble(),
       imagem: map['imagem'],
       descricao: map['descricao'],
       favorito: map['favorito'] ?? false,
