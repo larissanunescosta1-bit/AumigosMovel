@@ -21,18 +21,7 @@ class _TelaHomeState extends State<TelaHome> {
     super.initState();
 
     produtos = listaProdutos;
-    LocalStorageService.carregarProdutos().then((lista) {
-      setState(() {
-        produtos = lista;
-      });
-    });
-
-    LocalStorageService.carregarFavoritos().then((lista) {
-      setState(() {
-        listaFavoritos.clear();
-        listaFavoritos.addAll(lista);
-      });
-    });
+   
   }
 
   @override
@@ -281,12 +270,13 @@ class _TelaHomeState extends State<TelaHome> {
                                 : Colors.grey,
                           ),
                           onPressed: () {
-                            setState(() {
-                              produtos.remove(produto);
-                              listaFavoritos.add(produto);
-                            });
-                            LocalStorageService.salvarProdutos(listaProdutos);
-                            LocalStorageService.salvarFavoritos(listaFavoritos);
+                          setState(() {
+                       produtos.remove(produto);
+                          listaFavoritos.add(produto);
+                                });
+
+                        LocalStorageService.salvarProdutos(produtos);
+                         LocalStorageService.salvarFavoritos(listaFavoritos);
                           },
                         ),
                       ],
