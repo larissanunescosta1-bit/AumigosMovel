@@ -7,7 +7,7 @@ import 'package:flutter_application_1/modelo/local_storage_service.dart';
  * listagem persistida de produtos
  */
 class ListaProdutoController{
-
+//peguei do modelo do paim
   static Future<void> inserirProduto(int id, String nome, double preco, String imagem,
   String descricao,) async{
     //busco lista persistida
