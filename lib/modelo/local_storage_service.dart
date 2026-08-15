@@ -17,6 +17,8 @@ class LocalStorageService {
 
   // Recuperar a lista
   static Future<List<Produto>> carregarProdutos() async {
+
+    //  acesso ao armazenamento.
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? produtosJson = prefs.getString(LISTA_PRODUTOS);
 
@@ -26,7 +28,7 @@ class LocalStorageService {
     return Produto.decode(produtosJson);
   }
 
-
+// e como se fosse uma chave que é usada para identificar onde os favoritos serão salvos
 static const String LISTA_FAVORITOS = "favoritos";
 
 static Future<void> salvarFavoritos(List<Produto> favoritos) async {
@@ -40,7 +42,7 @@ static Future<void> salvarFavoritos(List<Produto> favoritos) async {
 
 static Future<List<Produto>> carregarFavoritos() async {
   final prefs = await SharedPreferences.getInstance();
-
+ // busca os favoritos salvos usando a chave LISTA_FAVORITOS
   String? json = prefs.getString(LISTA_FAVORITOS);
 
   if (json == null) {

@@ -4,6 +4,7 @@ import 'package:flutter_application_1/modelo/classes/lista_produtos.dart';
 import 'package:flutter_application_1/modelo/classes/produto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_application_1/modelo/local_storage_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TelaHome extends StatefulWidget {
   const TelaHome({super.key, required this.title});
@@ -19,7 +20,7 @@ class _TelaHomeState extends State<TelaHome> {
   @override
   void initState() {
     super.initState();
-
+// inicializa a lista da tela com os produtos salvos
     produtos = listaProdutos;
   }
 
@@ -43,6 +44,7 @@ class _TelaHomeState extends State<TelaHome> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
+                // filtro aonde  que mostra todos os produtos.
                 TextButton(
                   onPressed: () {
                     setState(() {
@@ -175,13 +177,20 @@ class _TelaHomeState extends State<TelaHome> {
                                             ),
                                             TextButton(
                                               child: Text("Abrir"),
-                                              onPressed: () {
+                                              onPressed: ()async {
                                                 Navigator.of(context).pop();
 
-                                                // Aqui você pode colocar a ação depois
-                                                // Ex: abrir o WhatsApp
+                                                  final Uri whatsapp = Uri.parse(
+                           'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
+                               );
+
+                             if (await canLaunchUrl(whatsapp)) {
+      await launchUrl(
+        whatsapp,
+        mode: LaunchMode.externalApplication,
+      );}
                                               },
-                                            ),
+                                        ),
                                       
                                           ],
                                         );
@@ -244,6 +253,8 @@ class _TelaHomeState extends State<TelaHome> {
                           ),
                           IconButton(
                             icon: Icon(
+                               // Se o produto estiver nos favoritos mostra o negocinho  preenchido.
+                               
                               listaFavoritos.contains(produto)
                                   ? Icons.bookmark
                                   : Icons.bookmark_border,
@@ -252,7 +263,9 @@ class _TelaHomeState extends State<TelaHome> {
                                   : Colors.grey,
                             ),
                             onPressed: () {
+                              // atualiza a tela depois de favoritar
                               setState(() {
+                                // Remove o produto da lista principal e vai para a area dos favoritos
                                 produtos.remove(produto);
                                 listaFavoritos.add(produto);
                               });
@@ -324,11 +337,19 @@ class _TelaHomeState extends State<TelaHome> {
                                               ),
                                               TextButton(
                                                 child: Text("Abrir"),
-                                                onPressed: () {
+                                                onPressed: ()async {
                                                   Navigator.of(context).pop();
 
-                                                  // Aqui você pode colocar a ação depois
-                                                  // Ex: abrir o WhatsApp
+                                                  final Uri whatsapp = Uri.parse(
+                           'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
+                               );
+
+                             if (await canLaunchUrl(whatsapp)) {
+      await launchUrl(
+        whatsapp,
+        mode: LaunchMode.externalApplication,
+      );
+    }
                                                 },
                                               ),
                                             ],
@@ -476,11 +497,19 @@ class _TelaHomeState extends State<TelaHome> {
                                                 ),
                                                 TextButton(
                                                   child: Text("Abrir"),
-                                                  onPressed: () {
+                                                  onPressed: ()async {
                                                     Navigator.of(context).pop();
+                                final Uri whatsapp = Uri.parse(
+                           'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
+                               );
 
-                                                    // Aqui você pode colocar a ação depois
-                                                    // Ex: abrir o WhatsApp
+                            if (await canLaunchUrl(whatsapp)) {
+      await launchUrl(
+        whatsapp,
+        mode: LaunchMode.externalApplication,
+      );
+    }
+                                                   
                                                   },
                                                 ),
                                               ],
@@ -633,13 +662,20 @@ class _TelaHomeState extends State<TelaHome> {
                                                   ),
                                                   TextButton(
                                                     child: Text("Abrir"),
-                                                    onPressed: () {
+                                                    onPressed: ()async {
                                                       Navigator.of(
                                                         context,
                                                       ).pop();
+  final Uri whatsapp = Uri.parse(
+                           'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
+                               );
 
-                                                      // Aqui você pode colocar a ação depois
-                                                      // Ex: abrir o WhatsApp
+                           if (await canLaunchUrl(whatsapp)) {
+      await launchUrl(
+        whatsapp,
+        mode: LaunchMode.externalApplication,
+      );
+    }
                                                     },
                                                   ),
 

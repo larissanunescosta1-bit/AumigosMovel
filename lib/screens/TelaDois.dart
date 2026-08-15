@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_application_1/modelo/classes/lista_produtos.dart';
 import 'package:flutter_application_1/modelo/classes/produto.dart';
 import 'package:flutter_application_1/modelo/local_storage_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TelaDois extends StatefulWidget {
   const TelaDois({super.key, required this.title});
@@ -45,8 +46,12 @@ class _TelaDoisState extends State<TelaDois> {
 
           Expanded(
             child: ListView.builder(
+               // define a quantidade de itens que vao ser mostrados
+              // aqui e usada a quantidade de produtos favoritados
               itemCount: listaFavoritos.length,
+              // Cria cada produto da lista de favoritos
               itemBuilder: (context, index) {
+                // pega o produto de acordo com aposição atual da lista.
                 Produto produto = listaFavoritos[index];
 
                 return TextButton(
@@ -78,10 +83,55 @@ class _TelaDoisState extends State<TelaDois> {
 
                               SizedBox(height: 15),
 
-                              Icon(
-                                FontAwesomeIcons.whatsapp,
-                                color: Color(0xFF25D366),
-                              ),
+                              IconButton(
+  icon: Icon(
+    FontAwesomeIcons.whatsapp,
+    color: Color(0xFF25D366),
+  ),
+  onPressed: () {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("WhatsApp"),
+          content: Text(
+            "Deseja entrar em contato pelo WhatsApp?",
+          ),
+          actions: [
+            TextButton(
+              child: Text("Cancelar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+
+            TextButton(
+              child: Text("Abrir"),
+              onPressed: () async {
+                // Fecha a janela de confirmação.
+                Navigator.of(context).pop();
+
+                // Cria o endereço do WhatsApp.
+                final Uri whatsapp = Uri.parse(
+                  'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
+                );
+
+                // Verifica se o endereço pode ser aberto.
+                if (await canLaunchUrl(whatsapp)) {
+                  // Abre o WhatsApp fora do aplicativo.
+                  await launchUrl(
+                    whatsapp,
+                    mode: LaunchMode.externalApplication,
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  },
+),
                             ],
                           ),
                           actions: [
@@ -139,11 +189,15 @@ class _TelaDoisState extends State<TelaDois> {
                         IconButton(
                           icon: const Icon(Icons.bookmark),
                           onPressed: () {
+                              // Atualiza a tela depois de remover o produto da lista de favoritos
                             setState(() {
                               listaFavoritos.remove(produto);
+                              // Coloca o produto novamente na lista principal
                               listaProdutos.add(produto);
                             });
+                              // salva a lista de produtos atualizada.
                             LocalStorageService.salvarProdutos(listaProdutos);
+                            // salva a lista de favoritos atualizada
                             LocalStorageService.salvarFavoritos(listaFavoritos);
                           },
                         ),

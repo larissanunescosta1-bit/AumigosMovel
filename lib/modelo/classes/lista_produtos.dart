@@ -2,7 +2,7 @@ import 'produto.dart';
 import 'package:flutter_application_1/modelo/local_storage_service.dart';
 
 
-
+// lista inicial de produtos do aplicativo
 List<Produto> listaProdutos = [
   Produto(
     id: 1,
@@ -28,9 +28,11 @@ List<Produto> listaProdutos = [
     descricao: "O lacinho mais fofo. TAM: Pequeno",
   ),
 ];
+// lista que armazena somente os produtos que foram favoritados
 List<Produto> listaFavoritos = [];
-
+// innicializa a lista dos produtos verificando se já existem produtos salvos
 Future<void> inicializarProdutos(List<Produto> produtos) async {
+  // carrega do armazenamento os produtos que já foram salvos
   List<Produto> lista = await LocalStorageService.carregarProdutos();
 
   if (lista.isEmpty) {
