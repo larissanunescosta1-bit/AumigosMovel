@@ -35,12 +35,13 @@ class Produto {
     return Produto(
       id: map['id'] ?? '',
       nome: map['nome'] ?? '',
-      preco: (map['preco'] ?? 0.0).toDouble(),
-      imagem: map['imagem'],
-      descricao: map['descricao'],
-      favorito: map['favorito'] ?? false,
-    );
-  }
+   // A API do Laravel usa "precoReferencia"
+   preco: double.parse( (map['precoReferencia'] ?? map['preco'] ?? 0).toString(), ),imagem: map['imagem'] ?? '',
+   // A API usa "descricaoGeral"
+   descricao: map['descricaoGeral'] ?? map['descricao'] ?? '',
+   // Continua usando o favorito salvo no celular
+   favorito: map['favorito'] ?? false, ); }
+
 
   // Facilita a conversão de uma lista de objetos para uma String JSON
   static String encode(List<Produto> produtos) => json.encode(

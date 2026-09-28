@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_application_1/modelo/classes/produto.dart';
+import 'package:flutter_application_1/modelo/objects/produto.dart';
 
 class LocalStorageService {
   //Constantes que indical a chava shared em que o dado será presistido

@@ -1,4 +1,4 @@
-import 'produto.dart';
+import '../objects/produto.dart';
 import 'package:flutter_application_1/modelo/local_storage_service.dart';
 
 
