@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_application_1/modelo/classes/lista_produtos.dart';
-import 'package:flutter_application_1/modelo/classes/produto.dart';
+import 'package:flutter_application_1/modelo/objects/produto.dart';
 import 'package:flutter_application_1/modelo/local_storage_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -64,11 +64,12 @@ class _TelaDoisState extends State<TelaDois> {
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Image.asset(
-                                produto.imagem,
-                                width: 200,
-                                height: 200,
-                              ),
+                                                          Image.network(
+  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  width: 200,
+  height: 200,
+  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+),
 
                               SizedBox(height: 10),
 
@@ -168,7 +169,19 @@ class _TelaDoisState extends State<TelaDois> {
 
                     child: Row(
                       children: [
-                        Image.asset(produto.imagem, width: 70, height: 70),
+                          Image.network(
+  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  width: 70,
+  height: 70,
+  fit: BoxFit.cover,
+    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+    errorBuilder: (context, error, stackTrace) {
+      return const Icon(
+        Icons.image_not_supported,
+        size: 40,
+      );
+    },
+),
 
                         const SizedBox(width: 10),
 
@@ -182,9 +195,11 @@ class _TelaDoisState extends State<TelaDois> {
                               ),
 
                               Text("R\$ ${produto.preco}"),
+                              Text(produto.descricao),
                             ],
                           ),
                         ),
+                         SizedBox(height: 15),
 
                         IconButton(
                           icon: const Icon(Icons.bookmark),

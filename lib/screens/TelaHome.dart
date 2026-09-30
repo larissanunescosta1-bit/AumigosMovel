@@ -5,6 +5,7 @@ import 'package:flutter_application_1/modelo/objects/produto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_application_1/modelo/local_storage_service.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_application_1/modelo/api/Sincroniza.dart';
 
 class TelaHome extends StatefulWidget {
   const TelaHome({super.key, required this.title});
@@ -23,17 +24,46 @@ class _TelaHomeState extends State<TelaHome> {
   @override
   void initState() {
     super.initState();
-// inicializa a lista da tela com os produtos salvos
-    produtos = listaProdutos;
+  carregarProdutos();
     
-    for(Produto p in produtos){
-      if(p.nome.contains("Lacinho")){
-        produtosLacinhos.add(p);
-      } else if (p.nome.contains("Bandana")){
-        produtosBandanas.add(p);
-      } else if (p.nome.contains("Roupinha")){
-        produtosRoupinhas.add(p);
-      }
+  }
+   Future<void> carregarProdutos() async {
+
+    try {
+
+      Sincroniza sincroniza = Sincroniza();
+
+      List<Produto> produtosApi =
+          await sincroniza.requestProdutos();
+
+      setState(() {
+
+        produtos = produtosApi;
+
+        produtosLacinhos.clear();
+        produtosBandanas.clear();
+        produtosRoupinhas.clear();
+
+        for (Produto p in produtos) {
+
+          if (p.nome.contains("Lacinho")) {
+
+            produtosLacinhos.add(p);
+
+          } else if (p.nome.contains("Bandana")) {
+
+            produtosBandanas.add(p);
+
+          } else if (p.nome.contains("Roupinha")) {
+
+            produtosRoupinhas.add(p);
+          }
+        }
+      });
+
+    } catch (e) {
+
+      print("Erro ao buscar produtos: $e");
     }
   }
 
@@ -158,11 +188,12 @@ class _TelaHomeState extends State<TelaHome> {
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Image.asset(
-                                  produto.imagem,
-                                  width: 200,
-                                  height: 200,
-                                ),
+                               Image.network(
+  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  width: 200,
+  height: 200,
+  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+),
 
                                 SizedBox(height: 10),
 
@@ -258,7 +289,19 @@ class _TelaHomeState extends State<TelaHome> {
                       ),
                       child: Row(
                         children: [
-                          Image.asset(produto.imagem, width: 70, height: 70),
+                          Image.network(
+  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  width: 70,
+  height: 70,
+  fit: BoxFit.cover,
+    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+    errorBuilder: (context, error, stackTrace) {
+      return const Icon(
+        Icons.image_not_supported,
+        size: 40,
+      );
+    },
+),
                           SizedBox(width: 10),
                           Expanded(
                             child: Column(
@@ -324,11 +367,12 @@ class _TelaHomeState extends State<TelaHome> {
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Image.asset(
-                                  produto.imagem,
-                                  width: 200,
-                                  height: 200,
-                                ),
+                               Image.network(
+  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  width: 200,
+  height: 200,
+  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+),
 
                                 SizedBox(height: 10),
 
@@ -424,7 +468,19 @@ class _TelaHomeState extends State<TelaHome> {
                       ),
                       child: Row(
                         children: [
-                          Image.asset(produto.imagem, width: 70, height: 70),
+                          Image.network(
+  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  width: 70,
+  height: 70,
+fit: BoxFit.cover,
+    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+    errorBuilder: (context, error, stackTrace) {
+      return const Icon(
+        Icons.image_not_supported,
+        size: 40,
+      );
+    },
+),
                           SizedBox(width: 10),
                           Expanded(
                             child: Column(
@@ -490,11 +546,12 @@ class _TelaHomeState extends State<TelaHome> {
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Image.asset(
-                                  produto.imagem,
-                                  width: 200,
-                                  height: 200,
-                                ),
+                                Image.network(
+  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  width: 200,
+  height: 200,
+  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+),
 
                                 SizedBox(height: 10),
 
@@ -590,7 +647,19 @@ class _TelaHomeState extends State<TelaHome> {
                       ),
                       child: Row(
                         children: [
-                          Image.asset(produto.imagem, width: 70, height: 70),
+                         Image.network(
+  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  width: 70,
+  height: 70,
+  fit: BoxFit.cover,
+    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+    errorBuilder: (context, error, stackTrace) {
+      return const Icon(
+        Icons.image_not_supported,
+        size: 40,
+      );
+    },
+),
                           SizedBox(width: 10),
                           Expanded(
                             child: Column(
@@ -658,11 +727,12 @@ class _TelaHomeState extends State<TelaHome> {
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Image.asset(
-                                  produto.imagem,
-                                  width: 200,
-                                  height: 200,
-                                ),
+                               Image.network(
+  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  width: 200,
+  height: 200,
+  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+),
 
                                 SizedBox(height: 10),
 
@@ -758,7 +828,19 @@ class _TelaHomeState extends State<TelaHome> {
                       ),
                       child: Row(
                         children: [
-                          Image.asset(produto.imagem, width: 70, height: 70),
+                          Image.network(
+  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  width: 70,
+  height: 70,
+  fit: BoxFit.cover,
+    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+    errorBuilder: (context, error, stackTrace) {
+      return const Icon(
+        Icons.image_not_supported,
+        size: 40,
+      );
+    },
+),
                           SizedBox(width: 10),
                           Expanded(
                             child: Column(
@@ -825,11 +907,12 @@ class _TelaHomeState extends State<TelaHome> {
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Image.asset(
-                                  produto.imagem,
-                                  width: 200,
-                                  height: 200,
-                                ),
+                                Image.network(
+  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  width: 200,
+  height: 200,
+  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+),
 
                                 SizedBox(height: 10),
 
@@ -925,7 +1008,19 @@ class _TelaHomeState extends State<TelaHome> {
                       ),
                       child: Row(
                         children: [
-                          Image.asset(produto.imagem, width: 70, height: 70),
+                        Image.network(
+  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  width: 70,
+  height: 70,
+  fit: BoxFit.cover,
+    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+    errorBuilder: (context, error, stackTrace) {
+      return const Icon(
+        Icons.image_not_supported,
+        size: 40,
+      );
+    },
+),
                           SizedBox(width: 10),
                           Expanded(
                             child: Column(

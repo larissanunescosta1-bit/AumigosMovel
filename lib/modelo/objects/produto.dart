@@ -39,6 +39,7 @@ class Produto {
    preco: double.parse( (map['precoReferencia'] ?? map['preco'] ?? 0).toString(), ),imagem: map['imagem'] ?? '',
    // A API usa "descricaoGeral"
    descricao: map['descricaoGeral'] ?? map['descricao'] ?? '',
+
    // Continua usando o favorito salvo no celular
    favorito: map['favorito'] ?? false, ); }
 

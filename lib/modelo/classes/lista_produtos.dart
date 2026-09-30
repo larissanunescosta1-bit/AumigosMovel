@@ -10,6 +10,7 @@ List<Produto> listaProdutos = [
     preco: 30,
     imagem: "imagens/bandana.png",
     descricao: "Bandana com detalhes. TAM: Médio",
+    
   ),
 
   Produto(

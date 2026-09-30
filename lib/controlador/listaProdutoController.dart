@@ -1,5 +1,6 @@
-import 'package:flutter_application_1/modelo/classes/produto.dart';
+
 import 'package:flutter_application_1/modelo/local_storage_service.dart';
+import 'package:flutter_application_1/modelo/objects/produto.dart';
 
 /**
  * Classe controle responsável por gerenciar a persistência de produtos.
