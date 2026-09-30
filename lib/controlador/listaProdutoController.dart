@@ -9,12 +9,12 @@ import 'package:flutter_application_1/modelo/objects/produto.dart';
  */
 class ListaProdutoController{
 //peguei do modelo do paim
-  static Future<void> inserirProduto(int id, String nome, double preco, String imagem,
+  static Future<void> inserirProduto(int id, String nome, double preco, String imagem,String categoria,
   String descricao,) async{
     //busco lista persistida
     List<Produto> lista =  await LocalStorageService.carregarProdutos();
     //inserindo produto na lista (voátil)
-    lista.add(new Produto(id: id, nome: nome, preco: preco , imagem: imagem,
+    lista.add(new Produto(id: id, nome: nome, preco: preco , imagem: imagem,categoria:categoria,
       descricao: descricao,));
     //salvando produto na lista persistida
     await LocalStorageService.salvarProdutos(lista);

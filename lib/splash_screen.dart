@@ -4,6 +4,8 @@ import 'main.dart'; // importa o meu main HomePage
 import 'package:flutter_application_1/controlador/listaProdutoController.dart';
 import 'package:flutter_application_1/modelo/classes/lista_produtos.dart';
 import 'package:flutter_application_1/modelo/local_storage_service.dart';
+import 'package:flutter_application_1/modelo/api/Sincroniza.dart';
+import 'package:flutter_application_1/modelo/objects/produto.dart';
 class SplashScreen extends StatefulWidget {
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -18,18 +20,30 @@ class _SplashScreenState extends State<SplashScreen> {
   }
   // aqui é o responsavel por carregar os dados antes de abrir a tela principal
     Future<void> iniciarApp() async {
-      // ve  se já existem produtos salvos e caso nao existam os produtos iniciais sao salvos
-  await ListaProdutoController.inicializarProdutos(listaProdutos);
-  // limpa a lista que esta agora na memoria
+       // Busca os produtos diretamente da API
+  Sincroniza api = Sincroniza();
+
+   List<Produto> produtosApi = await api.requestProdutos();
+
+  // Limpa a lista atual
   listaProdutos.clear();
-   // recupera do armazenamento os produtos que foram salvos e coloca novamente na lista de produtos
-  listaProdutos.addAll( await LocalStorageService.carregarProdutos(),);
-   // limpa a lista de favoritos 
+
+  // Coloca os produtos que vieram da API
+  listaProdutos.addAll(produtosApi);
+
+  // Carrega somente os favoritos salvos
   listaFavoritos.clear();
-   // recupera os favoritos salvos no celular e coloca novamente na lista de favoritos
   listaFavoritos.addAll(
     await LocalStorageService.carregarFavoritos(),
   );
+// Marca como favorito os produtos que já estavam salvos
+for (Produto produto in listaProdutos) {
+  for (Produto favorito in listaFavoritos) {
+    if (produto.id == favorito.id) {
+      produto.favorito = true;
+    }
+  }
+}
 
   await Future.delayed(const Duration(seconds: 3));
 

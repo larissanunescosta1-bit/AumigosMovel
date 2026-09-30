@@ -10,6 +10,7 @@ List<Produto> listaProdutos = [
     preco: 30,
     imagem: "imagens/bandana.png",
     descricao: "Bandana com detalhes. TAM: Médio",
+    categoria: "Bandana",
     
   ),
 
@@ -19,6 +20,7 @@ List<Produto> listaProdutos = [
     preco: 50,
     imagem: "imagens/roupinha.png",
     descricao: "Jardineira mais fofa. TAM: Pequeno",
+    categoria: "Roupinha",
   ),
 
   Produto(
@@ -27,6 +29,8 @@ List<Produto> listaProdutos = [
     preco: 10,
     imagem: "imagens/lacinhoRosa.png",
     descricao: "O lacinho mais fofo. TAM: Pequeno",
+     categoria: "Lacinho",
+     
   ),
 ];
 // lista que armazena somente os produtos que foram favoritados

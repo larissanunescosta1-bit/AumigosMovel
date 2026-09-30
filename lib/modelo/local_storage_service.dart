@@ -51,7 +51,12 @@ static Future<List<Produto>> carregarFavoritos() async {
 
   return Produto.decode(json);
 }
+static Future<void> limparProdutos() async {
+  final prefs = await SharedPreferences.getInstance();
 
+  await prefs.remove(LISTA_PRODUTOS);
+  await prefs.remove(LISTA_FAVORITOS);
+}
 
 
 }

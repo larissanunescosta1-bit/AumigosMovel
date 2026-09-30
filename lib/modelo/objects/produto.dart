@@ -6,6 +6,7 @@ class Produto {
   final double preco;
   final String imagem;
   final String descricao;
+  final String categoria;
   bool favorito;
 
   //construtor da classe que recer cada um de seus atributos
@@ -15,6 +16,7 @@ class Produto {
     required this.preco,
     required this.imagem,
     required this.descricao,
+    required this.categoria,
     this.favorito = false,
   });
 
@@ -26,6 +28,7 @@ class Produto {
       'preco': preco,
       'imagem': imagem,
       'descricao': descricao,
+      'categoria':categoria,
       'favorito': favorito,
     };
   }
@@ -33,13 +36,13 @@ class Produto {
   // Cria um objeto a partir de un Map
   factory Produto.fromMap(Map<String, dynamic> map) {
     return Produto(
-      id: map['id'] ?? '',
+     id: map['id'] ?? 0,
       nome: map['nome'] ?? '',
    // A API do Laravel usa "precoReferencia"
    preco: double.parse( (map['precoReferencia'] ?? map['preco'] ?? 0).toString(), ),imagem: map['imagem'] ?? '',
    // A API usa "descricaoGeral"
    descricao: map['descricaoGeral'] ?? map['descricao'] ?? '',
-
+    categoria: map['categoria']?['nome'] ?? '',
    // Continua usando o favorito salvo no celular
    favorito: map['favorito'] ?? false, ); }
 

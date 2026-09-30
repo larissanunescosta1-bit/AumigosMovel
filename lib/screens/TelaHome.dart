@@ -24,45 +24,45 @@ class _TelaHomeState extends State<TelaHome> {
   @override
   void initState() {
     super.initState();
-  carregarProdutos();
-    
+    carregarProdutos();
   }
-   Future<void> carregarProdutos() async {
 
+  Future<void> carregarProdutos() async {
     try {
-
       Sincroniza sincroniza = Sincroniza();
 
-      List<Produto> produtosApi =
-          await sincroniza.requestProdutos();
+      List<Produto> produtosApi = await sincroniza.requestProdutos();
 
       setState(() {
-
         produtos = produtosApi;
 
         produtosLacinhos.clear();
         produtosBandanas.clear();
         produtosRoupinhas.clear();
+        print("========== PRODUTOS ==========");
 
         for (Produto p in produtos) {
+          print("NOME: ${p.nome}");
+          print("CATEGORIA: ${p.categoria}");
+        }
 
-          if (p.nome.contains("Lacinho")) {
-
+        for (Produto p in produtos) {
+          if (p.categoria == "Lacinhos" ||
+              p.categoria == "Lacinho" ||
+              p.nome.contains("Lacinho")) {
             produtosLacinhos.add(p);
-
-          } else if (p.nome.contains("Bandana")) {
-
+          } else if (p.categoria == "Bandanas" ||
+              p.categoria == "Bandana" ||
+              p.nome.contains("Bandana")) {
             produtosBandanas.add(p);
-
-          } else if (p.nome.contains("Roupinha")) {
-
+          } else if (p.categoria == "Roupas" ||
+              p.categoria == "Roupinhas" ||
+              p.categoria == "Roupinha") {
             produtosRoupinhas.add(p);
           }
         }
       });
-
     } catch (e) {
-
       print("Erro ao buscar produtos: $e");
     }
   }
@@ -131,8 +131,8 @@ class _TelaHomeState extends State<TelaHome> {
                   onPressed: () {
                     setState(() {
                       flagFiltro = "Bandana";
-                    print(flagFiltro);
-                    print(listaProdutos);
+                      print(flagFiltro);
+                      print(listaProdutos);
                     });
                   },
                   style: TextButton.styleFrom(
@@ -170,918 +170,1017 @@ class _TelaHomeState extends State<TelaHome> {
           ),
 
           Expanded(
-            child: flagFiltro=="Todos"?
-            ListView.builder(
-              itemCount: produtos.length,
-              itemBuilder: (context, index) {
-                //&& produto.nome.contains("other")
-                Produto produto = produtos[index];
-               
-                  return TextButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(""),
+            child: flagFiltro == "Todos"
+                ? ListView.builder(
+                    itemCount: produtos.length,
+                    itemBuilder: (context, index) {
+                      //&& produto.nome.contains("other")
+                      Produto produto = produtos[index];
 
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                               Image.network(
-  'http://127.0.0.1:8000/storage/${produto.imagem}',
-  width: 200,
-  height: 200,
-  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-),
+                      return TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(""),
 
-                                SizedBox(height: 10),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.network(
+                                      'http://127.0.0.1:8000/storage/${produto.imagem}',
+                                      width: 200,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                      webHtmlElementStrategy:
+                                          WebHtmlElementStrategy.prefer,
+                                    ),
 
-                                Text(
-                                  produto.nome,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
+                                    SizedBox(height: 10),
 
-                                Text("R\$ ${produto.preco}"),
-                                Text(produto.descricao),
+                                    Text(
+                                      produto.nome,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
 
-                                SizedBox(height: 15),
+                                    Text("R\$ ${produto.preco}"),
+                                    Text(produto.descricao),
 
-                                IconButton(
-                                  icon: Icon(
-                                    FontAwesomeIcons.whatsapp,
-                                    color: Color(0xFF25D366),
-                                  ),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text("WhatsApp"),
-                                          content: Text(
-                                            "Deseja entrar em contato pelo WhatsApp?",
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              child: Text("Cancelar"),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: Text("Abrir"),
-                                              onPressed: ()async {
-                                                Navigator.of(context).pop();
+                                    SizedBox(height: 15),
 
-                                                  final Uri whatsapp = Uri.parse(
-                           'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
-                               );
+                                    IconButton(
+                                      icon: Icon(
+                                        FontAwesomeIcons.whatsapp,
+                                        color: Color(0xFF25D366),
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text("WhatsApp"),
+                                              content: Text(
+                                                "Deseja entrar em contato pelo WhatsApp?",
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  child: Text("Cancelar"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: Text("Abrir"),
+                                                  onPressed: () async {
+                                                    Navigator.of(context).pop();
 
-                             if (await canLaunchUrl(whatsapp)) {
-      await launchUrl(
-        whatsapp,
-        mode: LaunchMode.externalApplication,
-      );}
-                                              },
-                                        ),
-                                      
-                                          ],
+                                                    final Uri
+                                                    whatsapp = Uri.parse(
+                                                      'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
+                                                    );
+
+                                                    if (await canLaunchUrl(
+                                                      whatsapp,
+                                                    )) {
+                                                      await launchUrl(
+                                                        whatsapp,
+                                                        mode: LaunchMode
+                                                            .externalApplication,
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
                                         );
                                       },
-                                    );
-                                  },
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
 
-                            actions: [
-                              SizedBox(width: 10),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("Fechar"),
-                              ),
-                              SizedBox(width: 10),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      foregroundColor: Color.fromARGB(
-                        255,
-                        198,
-                        92,
-                        105,
-                      ), // mantém o layout igual ao Container
-                    ),
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 5),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Image.network(
-  'http://127.0.0.1:8000/storage/${produto.imagem}',
-  width: 70,
-  height: 70,
-  fit: BoxFit.cover,
-    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-    errorBuilder: (context, error, stackTrace) {
-      return const Icon(
-        Icons.image_not_supported,
-        size: 40,
-      );
-    },
-),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  produto.nome,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text("R\$ ${produto.preco}"),
-                                Text(produto.descricao),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                               // Se o produto estiver nos favoritos mostra o negocinho  preenchido.
-                               
-                              listaFavoritos.contains(produto)
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                              color: listaFavoritos.contains(produto)
-                                  ? Colors.amber
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              // atualiza a tela depois de favoritar
-                              setState(() {
-                                // Remove o produto da lista principal e vai para a area dos favoritos
-                                produtos.remove(produto);
-                                listaFavoritos.add(produto);
-                              });
-
-                              LocalStorageService.salvarProdutos(produtos);
-                              LocalStorageService.salvarFavoritos(
-                                listaFavoritos,
+                                actions: [
+                                  SizedBox(width: 10),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Fechar"),
+                                  ),
+                                  SizedBox(width: 10),
+                                ],
                               );
                             },
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          foregroundColor: Color.fromARGB(
+                            255,
+                            198,
+                            92,
+                            105,
+                          ), // mantém o layout igual ao Container
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.all(10),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black12, blurRadius: 5),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-              }
-              
-            )
-            ////////////////////////////////////////////////////////////////////////////////
-           : flagFiltro=="Lacinho"?
-           ListView.builder(
-              itemCount: produtosLacinhos.length,
-              itemBuilder: (context, index) {
-                //&& produto.nome.contains("other")
-                Produto produto = produtosLacinhos[index];
-               
-                  return TextButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(""),
-
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                               Image.network(
-  'http://127.0.0.1:8000/storage/${produto.imagem}',
-  width: 200,
-  height: 200,
-  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-),
-
-                                SizedBox(height: 10),
-
-                                Text(
-                                  produto.nome,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                          child: Row(
+                            children: [
+                              Image.network(
+                                'http://127.0.0.1:8000/storage/${produto.imagem}',
+                                width: 70,
+                                height: 70,
+                                fit: BoxFit.cover,
+                                webHtmlElementStrategy:
+                                    WebHtmlElementStrategy.prefer,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(
+                                    Icons.image_not_supported,
+                                    size: 40,
+                                  );
+                                },
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      produto.nome,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text("R\$ ${produto.preco}"),
+                                    Text(produto.descricao),
+                                  ],
                                 ),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  listaFavoritos.any((p) => p.id == produto.id)
+                                      ? Icons.bookmark
+                                      : Icons.bookmark_border,
+                                  color:
+                                      listaFavoritos.any(
+                                        (p) => p.id == produto.id,
+                                      )
+                                      ? Colors.amber
+                                      : Colors.grey,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    if (listaFavoritos.any(
+                                      (p) => p.id == produto.id,
+                                    )) {
+                                      // Se já está favoritado, remove dos favoritos
+                                      listaFavoritos.removeWhere(
+                                        (p) => p.id == produto.id,
+                                      );
+                                      produto.favorito = false;
+                                    } else {
+                                      // Se não está favoritado, adiciona
+                                      listaFavoritos.add(produto);
+                                      produto.favorito = true;
+                                    }
+                                  });
 
-                                Text("R\$ ${produto.preco}"),
-                                Text(produto.descricao),
+                                  await LocalStorageService.salvarFavoritos(
+                                    listaFavoritos,
+                                  );
+                                  print("FAVORITOS SALVOS:");
+                                  for (Produto p in listaFavoritos) {
+                                    print("${p.id} - ${p.nome}");
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                ////////////////////////////////////////////////////////////////////////////////
+                : flagFiltro == "Lacinho"
+                ? ListView.builder(
+                    itemCount: produtosLacinhos.length,
+                    itemBuilder: (context, index) {
+                      //&& produto.nome.contains("other")
+                      Produto produto = produtosLacinhos[index];
 
-                                SizedBox(height: 15),
+                      return TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(""),
 
-                                IconButton(
-                                  icon: Icon(
-                                    FontAwesomeIcons.whatsapp,
-                                    color: Color(0xFF25D366),
-                                  ),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text("WhatsApp"),
-                                          content: Text(
-                                            "Deseja entrar em contato pelo WhatsApp?",
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              child: Text("Cancelar"),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: Text("Abrir"),
-                                              onPressed: ()async {
-                                                Navigator.of(context).pop();
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.network(
+                                      'http://127.0.0.1:8000/storage/${produto.imagem}',
+                                      width: 200,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                      webHtmlElementStrategy:
+                                          WebHtmlElementStrategy.prefer,
+                                    ),
 
-                                                  final Uri whatsapp = Uri.parse(
-                           'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
-                               );
+                                    SizedBox(height: 10),
 
-                             if (await canLaunchUrl(whatsapp)) {
-      await launchUrl(
-        whatsapp,
-        mode: LaunchMode.externalApplication,
-      );}
-                                              },
-                                        ),
-                                      
-                                          ],
+                                    Text(
+                                      produto.nome,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+
+                                    Text("R\$ ${produto.preco}"),
+                                    Text(produto.descricao),
+
+                                    SizedBox(height: 15),
+
+                                    IconButton(
+                                      icon: Icon(
+                                        FontAwesomeIcons.whatsapp,
+                                        color: Color(0xFF25D366),
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text("WhatsApp"),
+                                              content: Text(
+                                                "Deseja entrar em contato pelo WhatsApp?",
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  child: Text("Cancelar"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: Text("Abrir"),
+                                                  onPressed: () async {
+                                                    Navigator.of(context).pop();
+
+                                                    final Uri
+                                                    whatsapp = Uri.parse(
+                                                      'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
+                                                    );
+
+                                                    if (await canLaunchUrl(
+                                                      whatsapp,
+                                                    )) {
+                                                      await launchUrl(
+                                                        whatsapp,
+                                                        mode: LaunchMode
+                                                            .externalApplication,
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
                                         );
                                       },
-                                    );
-                                  },
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
 
-                            actions: [
-                              SizedBox(width: 10),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("Fechar"),
-                              ),
-                              SizedBox(width: 10),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      foregroundColor: Color.fromARGB(
-                        255,
-                        198,
-                        92,
-                        105,
-                      ), // mantém o layout igual ao Container
-                    ),
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 5),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Image.network(
-  'http://127.0.0.1:8000/storage/${produto.imagem}',
-  width: 70,
-  height: 70,
-fit: BoxFit.cover,
-    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-    errorBuilder: (context, error, stackTrace) {
-      return const Icon(
-        Icons.image_not_supported,
-        size: 40,
-      );
-    },
-),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  produto.nome,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text("R\$ ${produto.preco}"),
-                                Text(produto.descricao),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                               // Se o produto estiver nos favoritos mostra o negocinho  preenchido.
-                               
-                              listaFavoritos.contains(produto)
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                              color: listaFavoritos.contains(produto)
-                                  ? Colors.amber
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              // atualiza a tela depois de favoritar
-                              setState(() {
-                                // Remove o produto da lista principal e vai para a area dos favoritos
-                                produtos.remove(produto);
-                                listaFavoritos.add(produto);
-                              });
-
-                              LocalStorageService.salvarProdutos(produtos);
-                              LocalStorageService.salvarFavoritos(
-                                listaFavoritos,
+                                actions: [
+                                  SizedBox(width: 10),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Fechar"),
+                                  ),
+                                  SizedBox(width: 10),
+                                ],
                               );
                             },
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          foregroundColor: Color.fromARGB(
+                            255,
+                            198,
+                            92,
+                            105,
+                          ), // mantém o layout igual ao Container
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.all(10),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black12, blurRadius: 5),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-              }
-              
-            )
-            
-             : flagFiltro=="Bandana"?
-           ListView.builder(
-              itemCount: produtosBandanas.length,
-              itemBuilder: (context, index) {
-                //&& produto.nome.contains("other")
-                Produto produto = produtosBandanas[index];
-               
-                  return TextButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(""),
-
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Image.network(
-  'http://127.0.0.1:8000/storage/${produto.imagem}',
-  width: 200,
-  height: 200,
-  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-),
-
-                                SizedBox(height: 10),
-
-                                Text(
-                                  produto.nome,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                          child: Row(
+                            children: [
+                              Image.network(
+                                'http://127.0.0.1:8000/storage/${produto.imagem}',
+                                width: 70,
+                                height: 70,
+                                fit: BoxFit.cover,
+                                webHtmlElementStrategy:
+                                    WebHtmlElementStrategy.prefer,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(
+                                    Icons.image_not_supported,
+                                    size: 40,
+                                  );
+                                },
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      produto.nome,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text("R\$ ${produto.preco}"),
+                                    Text(produto.descricao),
+                                  ],
                                 ),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  listaFavoritos.any((p) => p.id == produto.id)
+                                      ? Icons.bookmark
+                                      : Icons.bookmark_border,
+                                  color:
+                                      listaFavoritos.any(
+                                        (p) => p.id == produto.id,
+                                      )
+                                      ? Colors.amber
+                                      : Colors.grey,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    if (listaFavoritos.any(
+                                      (p) => p.id == produto.id,
+                                    )) {
+                                      // Se já está favoritado, remove dos favoritos
+                                      listaFavoritos.removeWhere(
+                                        (p) => p.id == produto.id,
+                                      );
+                                      produto.favorito = false;
+                                    } else {
+                                      // Se não está favoritado, adiciona
+                                      listaFavoritos.add(produto);
+                                      produto.favorito = true;
+                                    }
+                                  });
 
-                                Text("R\$ ${produto.preco}"),
-                                Text(produto.descricao),
+                                  await LocalStorageService.salvarFavoritos(
+                                    listaFavoritos,
+                                  );
+                                  print("FAVORITOS SALVOS:");
+                                  for (Produto p in listaFavoritos) {
+                                    print("${p.id} - ${p.nome}");
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : flagFiltro == "Bandana"
+                ? ListView.builder(
+                    itemCount: produtosBandanas.length,
+                    itemBuilder: (context, index) {
+                      //&& produto.nome.contains("other")
+                      Produto produto = produtosBandanas[index];
 
-                                SizedBox(height: 15),
+                      return TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(""),
 
-                                IconButton(
-                                  icon: Icon(
-                                    FontAwesomeIcons.whatsapp,
-                                    color: Color(0xFF25D366),
-                                  ),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text("WhatsApp"),
-                                          content: Text(
-                                            "Deseja entrar em contato pelo WhatsApp?",
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              child: Text("Cancelar"),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: Text("Abrir"),
-                                              onPressed: ()async {
-                                                Navigator.of(context).pop();
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.network(
+                                      'http://127.0.0.1:8000/storage/${produto.imagem}',
+                                      width: 200,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                      webHtmlElementStrategy:
+                                          WebHtmlElementStrategy.prefer,
+                                    ),
 
-                                                  final Uri whatsapp = Uri.parse(
-                           'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
-                               );
+                                    SizedBox(height: 10),
 
-                             if (await canLaunchUrl(whatsapp)) {
-      await launchUrl(
-        whatsapp,
-        mode: LaunchMode.externalApplication,
-      );}
-                                              },
-                                        ),
-                                      
-                                          ],
+                                    Text(
+                                      produto.nome,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+
+                                    Text("R\$ ${produto.preco}"),
+                                    Text(produto.descricao),
+
+                                    SizedBox(height: 15),
+
+                                    IconButton(
+                                      icon: Icon(
+                                        FontAwesomeIcons.whatsapp,
+                                        color: Color(0xFF25D366),
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text("WhatsApp"),
+                                              content: Text(
+                                                "Deseja entrar em contato pelo WhatsApp?",
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  child: Text("Cancelar"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: Text("Abrir"),
+                                                  onPressed: () async {
+                                                    Navigator.of(context).pop();
+
+                                                    final Uri
+                                                    whatsapp = Uri.parse(
+                                                      'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
+                                                    );
+
+                                                    if (await canLaunchUrl(
+                                                      whatsapp,
+                                                    )) {
+                                                      await launchUrl(
+                                                        whatsapp,
+                                                        mode: LaunchMode
+                                                            .externalApplication,
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
                                         );
                                       },
-                                    );
-                                  },
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
 
-                            actions: [
-                              SizedBox(width: 10),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("Fechar"),
-                              ),
-                              SizedBox(width: 10),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      foregroundColor: Color.fromARGB(
-                        255,
-                        198,
-                        92,
-                        105,
-                      ), // mantém o layout igual ao Container
-                    ),
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 5),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                         Image.network(
-  'http://127.0.0.1:8000/storage/${produto.imagem}',
-  width: 70,
-  height: 70,
-  fit: BoxFit.cover,
-    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-    errorBuilder: (context, error, stackTrace) {
-      return const Icon(
-        Icons.image_not_supported,
-        size: 40,
-      );
-    },
-),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  produto.nome,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text("R\$ ${produto.preco}"),
-                                Text(produto.descricao),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                               // Se o produto estiver nos favoritos mostra o negocinho  preenchido.
-                               
-                              listaFavoritos.contains(produto)
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                              color: listaFavoritos.contains(produto)
-                                  ? Colors.amber
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              // atualiza a tela depois de favoritar
-                              setState(() {
-                                // Remove o produto da lista principal e vai para a area dos favoritos
-                                produtos.remove(produto);
-                                listaFavoritos.add(produto);
-                              });
-
-                              LocalStorageService.salvarProdutos(produtos);
-                              LocalStorageService.salvarFavoritos(
-                                listaFavoritos,
+                                actions: [
+                                  SizedBox(width: 10),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Fechar"),
+                                  ),
+                                  SizedBox(width: 10),
+                                ],
                               );
                             },
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          foregroundColor: Color.fromARGB(
+                            255,
+                            198,
+                            92,
+                            105,
+                          ), // mantém o layout igual ao Container
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.all(10),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black12, blurRadius: 5),
+                            ],
                           ),
-                        ],
-                     ),
-                    ),
-                  );
-              }
-              
-            )
-             
-            //////////////////////////////////////////////////////
-            ///
-              : flagFiltro=="Roupinha"?
-           ListView.builder(
-              itemCount: produtosRoupinhas.length,
-              itemBuilder: (context, index) {
-                //&& produto.nome.contains("other")
-                Produto produto = produtosRoupinhas[index];
-               
-                  return TextButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(""),
-
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                               Image.network(
-  'http://127.0.0.1:8000/storage/${produto.imagem}',
-  width: 200,
-  height: 200,
-  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-),
-
-                                SizedBox(height: 10),
-
-                                Text(
-                                  produto.nome,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                          child: Row(
+                            children: [
+                              Image.network(
+                                'http://127.0.0.1:8000/storage/${produto.imagem}',
+                                width: 70,
+                                height: 70,
+                                fit: BoxFit.cover,
+                                webHtmlElementStrategy:
+                                    WebHtmlElementStrategy.prefer,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(
+                                    Icons.image_not_supported,
+                                    size: 40,
+                                  );
+                                },
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      produto.nome,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text("R\$ ${produto.preco}"),
+                                    Text(produto.descricao),
+                                  ],
                                 ),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  listaFavoritos.any((p) => p.id == produto.id)
+                                      ? Icons.bookmark
+                                      : Icons.bookmark_border,
+                                  color:
+                                      listaFavoritos.any(
+                                        (p) => p.id == produto.id,
+                                      )
+                                      ? Colors.amber
+                                      : Colors.grey,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    if (listaFavoritos.any(
+                                      (p) => p.id == produto.id,
+                                    )) {
+                                      // Se já está favoritado, remove dos favoritos
+                                      listaFavoritos.removeWhere(
+                                        (p) => p.id == produto.id,
+                                      );
+                                      produto.favorito = false;
+                                    } else {
+                                      // Se não está favoritado, adiciona
+                                      listaFavoritos.add(produto);
+                                      produto.favorito = true;
+                                    }
+                                  });
 
-                                Text("R\$ ${produto.preco}"),
-                                Text(produto.descricao),
+                                  await LocalStorageService.salvarFavoritos(
+                                    listaFavoritos,
+                                  );
+                                  print("FAVORITOS SALVOS:");
+                                  for (Produto p in listaFavoritos) {
+                                    print("${p.id} - ${p.nome}");
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                //////////////////////////////////////////////////////
+                ///
+                : flagFiltro == "Roupinha"
+                ? ListView.builder(
+                    itemCount: produtosRoupinhas.length,
+                    itemBuilder: (context, index) {
+                      //&& produto.nome.contains("other")
+                      Produto produto = produtosRoupinhas[index];
 
-                                SizedBox(height: 15),
+                      return TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(""),
 
-                                IconButton(
-                                  icon: Icon(
-                                    FontAwesomeIcons.whatsapp,
-                                    color: Color(0xFF25D366),
-                                  ),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text("WhatsApp"),
-                                          content: Text(
-                                            "Deseja entrar em contato pelo WhatsApp?",
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              child: Text("Cancelar"),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: Text("Abrir"),
-                                              onPressed: ()async {
-                                                Navigator.of(context).pop();
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.network(
+                                      'http://127.0.0.1:8000/storage/${produto.imagem}',
+                                      width: 200,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                      webHtmlElementStrategy:
+                                          WebHtmlElementStrategy.prefer,
+                                    ),
 
-                                                  final Uri whatsapp = Uri.parse(
-                           'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
-                               );
+                                    SizedBox(height: 10),
 
-                             if (await canLaunchUrl(whatsapp)) {
-      await launchUrl(
-        whatsapp,
-        mode: LaunchMode.externalApplication,
-      );}
-                                              },
-                                        ),
-                                      
-                                          ],
+                                    Text(
+                                      produto.nome,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+
+                                    Text("R\$ ${produto.preco}"),
+                                    Text(produto.descricao),
+
+                                    SizedBox(height: 15),
+
+                                    IconButton(
+                                      icon: Icon(
+                                        FontAwesomeIcons.whatsapp,
+                                        color: Color(0xFF25D366),
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text("WhatsApp"),
+                                              content: Text(
+                                                "Deseja entrar em contato pelo WhatsApp?",
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  child: Text("Cancelar"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: Text("Abrir"),
+                                                  onPressed: () async {
+                                                    Navigator.of(context).pop();
+
+                                                    final Uri
+                                                    whatsapp = Uri.parse(
+                                                      'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
+                                                    );
+
+                                                    if (await canLaunchUrl(
+                                                      whatsapp,
+                                                    )) {
+                                                      await launchUrl(
+                                                        whatsapp,
+                                                        mode: LaunchMode
+                                                            .externalApplication,
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
                                         );
                                       },
-                                    );
-                                  },
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
 
-                            actions: [
-                              SizedBox(width: 10),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("Fechar"),
-                              ),
-                              SizedBox(width: 10),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      foregroundColor: Color.fromARGB(
-                        255,
-                        198,
-                        92,
-                        105,
-                      ), // mantém o layout igual ao Container
-                    ),
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 5),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Image.network(
-  'http://127.0.0.1:8000/storage/${produto.imagem}',
-  width: 70,
-  height: 70,
-  fit: BoxFit.cover,
-    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-    errorBuilder: (context, error, stackTrace) {
-      return const Icon(
-        Icons.image_not_supported,
-        size: 40,
-      );
-    },
-),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  produto.nome,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text("R\$ ${produto.preco}"),
-                                Text(produto.descricao),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                               // Se o produto estiver nos favoritos mostra o negocinho  preenchido.
-                               
-                              listaFavoritos.contains(produto)
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                              color: listaFavoritos.contains(produto)
-                                  ? Colors.amber
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              // atualiza a tela depois de favoritar
-                              setState(() {
-                                // Remove o produto da lista principal e vai para a area dos favoritos
-                                produtos.remove(produto);
-                                listaFavoritos.add(produto);
-                              });
-
-                              LocalStorageService.salvarProdutos(produtos);
-                              LocalStorageService.salvarFavoritos(
-                                listaFavoritos,
+                                actions: [
+                                  SizedBox(width: 10),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Fechar"),
+                                  ),
+                                  SizedBox(width: 10),
+                                ],
                               );
                             },
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          foregroundColor: Color.fromARGB(
+                            255,
+                            198,
+                            92,
+                            105,
+                          ), // mantém o layout igual ao Container
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.all(10),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black12, blurRadius: 5),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-              }
-              
-            )
-             
-            //////////////////////////////////////////////////////////
-              : flagFiltro=="Roupinha"?
-           ListView.builder(
-              itemCount: produtosLacinhos.length,
-              itemBuilder: (context, index) {
-                //&& produto.nome.contains("other")
-                Produto produto = produtosLacinhos[index];
-               
-                  return TextButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(""),
-
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Image.network(
-  'http://127.0.0.1:8000/storage/${produto.imagem}',
-  width: 200,
-  height: 200,
-  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-),
-
-                                SizedBox(height: 10),
-
-                                Text(
-                                  produto.nome,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                          child: Row(
+                            children: [
+                              Image.network(
+                                'http://127.0.0.1:8000/storage/${produto.imagem}',
+                                width: 70,
+                                height: 70,
+                                fit: BoxFit.cover,
+                                webHtmlElementStrategy:
+                                    WebHtmlElementStrategy.prefer,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(
+                                    Icons.image_not_supported,
+                                    size: 40,
+                                  );
+                                },
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      produto.nome,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text("R\$ ${produto.preco}"),
+                                    Text(produto.descricao),
+                                  ],
                                 ),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  listaFavoritos.any((p) => p.id == produto.id)
+                                      ? Icons.bookmark
+                                      : Icons.bookmark_border,
+                                  color:
+                                      listaFavoritos.any(
+                                        (p) => p.id == produto.id,
+                                      )
+                                      ? Colors.amber
+                                      : Colors.grey,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    if (listaFavoritos.any(
+                                      (p) => p.id == produto.id,
+                                    )) {
+                                      // Se já está favoritado, remove dos favoritos
+                                      listaFavoritos.removeWhere(
+                                        (p) => p.id == produto.id,
+                                      );
+                                      produto.favorito = false;
+                                    } else {
+                                      // Se não está favoritado, adiciona
+                                      listaFavoritos.add(produto);
+                                      produto.favorito = true;
+                                    }
+                                  });
 
-                                Text("R\$ ${produto.preco}"),
-                                Text(produto.descricao),
+                                  await LocalStorageService.salvarFavoritos(
+                                    listaFavoritos,
+                                  );
+                                  print("FAVORITOS SALVOS:");
+                                  for (Produto p in listaFavoritos) {
+                                    print("${p.id} - ${p.nome}");
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                //////////////////////////////////////////////////////////
+                : flagFiltro == "Roupinha"
+                ? ListView.builder(
+                    itemCount: produtosLacinhos.length,
+                    itemBuilder: (context, index) {
+                      //&& produto.nome.contains("other")
+                      Produto produto = produtosLacinhos[index];
 
-                                SizedBox(height: 15),
+                      return TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(""),
 
-                                IconButton(
-                                  icon: Icon(
-                                    FontAwesomeIcons.whatsapp,
-                                    color: Color(0xFF25D366),
-                                  ),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text("WhatsApp"),
-                                          content: Text(
-                                            "Deseja entrar em contato pelo WhatsApp?",
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              child: Text("Cancelar"),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: Text("Abrir"),
-                                              onPressed: ()async {
-                                                Navigator.of(context).pop();
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.network(
+                                      'http://127.0.0.1:8000/storage/${produto.imagem}',
+                                      width: 200,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                      webHtmlElementStrategy:
+                                          WebHtmlElementStrategy.prefer,
+                                    ),
 
-                                                  final Uri whatsapp = Uri.parse(
-                           'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
-                               );
+                                    SizedBox(height: 10),
 
-                             if (await canLaunchUrl(whatsapp)) {
-      await launchUrl(
-        whatsapp,
-        mode: LaunchMode.externalApplication,
-      );}
-                                              },
-                                        ),
-                                      
-                                          ],
+                                    Text(
+                                      produto.nome,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+
+                                    Text("R\$ ${produto.preco}"),
+                                    Text(produto.descricao),
+
+                                    SizedBox(height: 15),
+
+                                    IconButton(
+                                      icon: Icon(
+                                        FontAwesomeIcons.whatsapp,
+                                        color: Color(0xFF25D366),
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text("WhatsApp"),
+                                              content: Text(
+                                                "Deseja entrar em contato pelo WhatsApp?",
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  child: Text("Cancelar"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: Text("Abrir"),
+                                                  onPressed: () async {
+                                                    Navigator.of(context).pop();
+
+                                                    final Uri
+                                                    whatsapp = Uri.parse(
+                                                      'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
+                                                    );
+
+                                                    if (await canLaunchUrl(
+                                                      whatsapp,
+                                                    )) {
+                                                      await launchUrl(
+                                                        whatsapp,
+                                                        mode: LaunchMode
+                                                            .externalApplication,
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
                                         );
                                       },
-                                    );
-                                  },
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
 
-                            actions: [
-                              SizedBox(width: 10),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("Fechar"),
-                              ),
-                              SizedBox(width: 10),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      foregroundColor: Color.fromARGB(
-                        255,
-                        198,
-                        92,
-                        105,
-                      ), // mantém o layout igual ao Container
-                    ),
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 5),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                        Image.network(
-  'http://127.0.0.1:8000/storage/${produto.imagem}',
-  width: 70,
-  height: 70,
-  fit: BoxFit.cover,
-    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-    errorBuilder: (context, error, stackTrace) {
-      return const Icon(
-        Icons.image_not_supported,
-        size: 40,
-      );
-    },
-),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  produto.nome,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text("R\$ ${produto.preco}"),
-                                Text(produto.descricao),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                               // Se o produto estiver nos favoritos mostra o negocinho  preenchido.
-                               
-                              listaFavoritos.contains(produto)
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                              color: listaFavoritos.contains(produto)
-                                  ? Colors.amber
-                                  : Colors.grey,
-                            ),
-                            onPressed: () {
-                              // atualiza a tela depois de favoritar
-                              setState(() {
-                                // Remove o produto da lista principal e vai para a area dos favoritos
-                                produtos.remove(produto);
-                                listaFavoritos.add(produto);
-                              });
-
-                              LocalStorageService.salvarProdutos(produtos);
-                              LocalStorageService.salvarFavoritos(
-                                listaFavoritos,
+                                actions: [
+                                  SizedBox(width: 10),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Fechar"),
+                                  ),
+                                  SizedBox(width: 10),
+                                ],
                               );
                             },
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          foregroundColor: Color.fromARGB(
+                            255,
+                            198,
+                            92,
+                            105,
+                          ), // mantém o layout igual ao Container
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.all(10),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black12, blurRadius: 5),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-              }
-              
-            ):Container()
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            ),
+                          child: Row(
+                            children: [
+                              Image.network(
+                                'http://127.0.0.1:8000/storage/${produto.imagem}',
+                                width: 70,
+                                height: 70,
+                                fit: BoxFit.cover,
+                                webHtmlElementStrategy:
+                                    WebHtmlElementStrategy.prefer,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(
+                                    Icons.image_not_supported,
+                                    size: 40,
+                                  );
+                                },
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      produto.nome,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text("R\$ ${produto.preco}"),
+                                    Text(produto.descricao),
+                                  ],
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  listaFavoritos.any((p) => p.id == produto.id)
+                                      ? Icons.bookmark
+                                      : Icons.bookmark_border,
+                                  color:
+                                      listaFavoritos.any(
+                                        (p) => p.id == produto.id,
+                                      )
+                                      ? Colors.amber
+                                      : Colors.grey,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    if (listaFavoritos.any(
+                                      (p) => p.id == produto.id,
+                                    )) {
+                                      // Se já está favoritado, remove dos favoritos
+                                      listaFavoritos.removeWhere(
+                                        (p) => p.id == produto.id,
+                                      );
+                                      produto.favorito = false;
+                                    } else {
+                                      // Se não está favoritado, adiciona
+                                      listaFavoritos.add(produto);
+                                      produto.favorito = true;
+                                    }
+                                  });
+
+                                  await LocalStorageService.salvarFavoritos(
+                                    listaFavoritos,
+                                  );
+                                  print("FAVORITOS SALVOS:");
+                                  for (Produto p in listaFavoritos) {
+                                    print("${p.id} - ${p.nome}");
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : Container(),
+          ),
         ],
       ),
     );
