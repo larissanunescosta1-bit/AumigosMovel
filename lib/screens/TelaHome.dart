@@ -42,8 +42,11 @@ class _TelaHomeState extends State<TelaHome> {
         print("========== PRODUTOS ==========");
 
         for (Produto p in produtos) {
-          print("NOME: ${p.nome}");
-          print("CATEGORIA: ${p.categoria}");
+         print("==============================");
+  print("ID: ${p.id}");
+  print("NOME: ${p.nome}");
+  print("CATEGORIA: ${p.categoria}");
+  print("IMAGEM: ${p.imagem}");
         }
 
         for (Produto p in produtos) {
@@ -188,7 +191,7 @@ class _TelaHomeState extends State<TelaHome> {
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Image.network(
+                               Image.network(
                                       'http://127.0.0.1:8000/storage/${produto.imagem}',
                                       width: 200,
                                       height: 200,
@@ -286,6 +289,7 @@ class _TelaHomeState extends State<TelaHome> {
                           ), // mantém o layout igual ao Container
                         ),
                         child: Container(
+                          key: ValueKey(produto.id),
                           margin: EdgeInsets.all(10),
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -297,13 +301,12 @@ class _TelaHomeState extends State<TelaHome> {
                           ),
                           child: Row(
                             children: [
-                              Image.network(
+                               Image.network(
                                 'http://127.0.0.1:8000/storage/${produto.imagem}',
                                 width: 70,
                                 height: 70,
                                 fit: BoxFit.cover,
-                                webHtmlElementStrategy:
-                                    WebHtmlElementStrategy.prefer,
+                                 webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
                                 errorBuilder: (context, error, stackTrace) {
                                   return const Icon(
                                     Icons.image_not_supported,
@@ -488,6 +491,7 @@ class _TelaHomeState extends State<TelaHome> {
                           ), // mantém o layout igual ao Container
                         ),
                         child: Container(
+                          key: ValueKey(produto.id),
                           margin: EdgeInsets.all(10),
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -689,6 +693,7 @@ class _TelaHomeState extends State<TelaHome> {
                           ), // mantém o layout igual ao Container
                         ),
                         child: Container(
+                          key: ValueKey(produto.id),
                           margin: EdgeInsets.all(10),
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -700,13 +705,12 @@ class _TelaHomeState extends State<TelaHome> {
                           ),
                           child: Row(
                             children: [
-                              Image.network(
+                               Image.network(
                                 'http://127.0.0.1:8000/storage/${produto.imagem}',
                                 width: 70,
                                 height: 70,
                                 fit: BoxFit.cover,
-                                webHtmlElementStrategy:
-                                    WebHtmlElementStrategy.prefer,
+                                  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
                                 errorBuilder: (context, error, stackTrace) {
                                   return const Icon(
                                     Icons.image_not_supported,
@@ -892,6 +896,7 @@ class _TelaHomeState extends State<TelaHome> {
                           ), // mantém o layout igual ao Container
                         ),
                         child: Container(
+                          key: ValueKey(produto.id),
                           margin: EdgeInsets.all(10),
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -908,8 +913,7 @@ class _TelaHomeState extends State<TelaHome> {
                                 width: 70,
                                 height: 70,
                                 fit: BoxFit.cover,
-                                webHtmlElementStrategy:
-                                    WebHtmlElementStrategy.prefer,
+                                  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
                                 errorBuilder: (context, error, stackTrace) {
                                   return const Icon(
                                     Icons.image_not_supported,
@@ -978,207 +982,7 @@ class _TelaHomeState extends State<TelaHome> {
                     },
                   )
                 //////////////////////////////////////////////////////////
-                : flagFiltro == "Roupinha"
-                ? ListView.builder(
-                    itemCount: produtosLacinhos.length,
-                    itemBuilder: (context, index) {
-                      //&& produto.nome.contains("other")
-                      Produto produto = produtosLacinhos[index];
-
-                      return TextButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text(""),
-
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Image.network(
-                                      'http://127.0.0.1:8000/storage/${produto.imagem}',
-                                      width: 200,
-                                      height: 200,
-                                      fit: BoxFit.cover,
-                                      webHtmlElementStrategy:
-                                          WebHtmlElementStrategy.prefer,
-                                    ),
-
-                                    SizedBox(height: 10),
-
-                                    Text(
-                                      produto.nome,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-
-                                    Text("R\$ ${produto.preco}"),
-                                    Text(produto.descricao),
-
-                                    SizedBox(height: 15),
-
-                                    IconButton(
-                                      icon: Icon(
-                                        FontAwesomeIcons.whatsapp,
-                                        color: Color(0xFF25D366),
-                                      ),
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: Text("WhatsApp"),
-                                              content: Text(
-                                                "Deseja entrar em contato pelo WhatsApp?",
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                  child: Text("Cancelar"),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                                TextButton(
-                                                  child: Text("Abrir"),
-                                                  onPressed: () async {
-                                                    Navigator.of(context).pop();
-
-                                                    final Uri
-                                                    whatsapp = Uri.parse(
-                                                      'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
-                                                    );
-
-                                                    if (await canLaunchUrl(
-                                                      whatsapp,
-                                                    )) {
-                                                      await launchUrl(
-                                                        whatsapp,
-                                                        mode: LaunchMode
-                                                            .externalApplication,
-                                                      );
-                                                    }
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-
-                                actions: [
-                                  SizedBox(width: 10),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("Fechar"),
-                                  ),
-                                  SizedBox(width: 10),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          foregroundColor: Color.fromARGB(
-                            255,
-                            198,
-                            92,
-                            105,
-                          ), // mantém o layout igual ao Container
-                        ),
-                        child: Container(
-                          margin: EdgeInsets.all(10),
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(color: Colors.black12, blurRadius: 5),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Image.network(
-                                'http://127.0.0.1:8000/storage/${produto.imagem}',
-                                width: 70,
-                                height: 70,
-                                fit: BoxFit.cover,
-                                webHtmlElementStrategy:
-                                    WebHtmlElementStrategy.prefer,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return const Icon(
-                                    Icons.image_not_supported,
-                                    size: 40,
-                                  );
-                                },
-                              ),
-                              SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      produto.nome,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text("R\$ ${produto.preco}"),
-                                    Text(produto.descricao),
-                                  ],
-                                ),
-                              ),
-                              IconButton(
-                                icon: Icon(
-                                  listaFavoritos.any((p) => p.id == produto.id)
-                                      ? Icons.bookmark
-                                      : Icons.bookmark_border,
-                                  color:
-                                      listaFavoritos.any(
-                                        (p) => p.id == produto.id,
-                                      )
-                                      ? Colors.amber
-                                      : Colors.grey,
-                                ),
-                                onPressed: () async {
-                                  setState(() {
-                                    if (listaFavoritos.any(
-                                      (p) => p.id == produto.id,
-                                    )) {
-                                      // Se já está favoritado, remove dos favoritos
-                                      listaFavoritos.removeWhere(
-                                        (p) => p.id == produto.id,
-                                      );
-                                      produto.favorito = false;
-                                    } else {
-                                      // Se não está favoritado, adiciona
-                                      listaFavoritos.add(produto);
-                                      produto.favorito = true;
-                                    }
-                                  });
-
-                                  await LocalStorageService.salvarFavoritos(
-                                    listaFavoritos,
-                                  );
-                                  print("FAVORITOS SALVOS:");
-                                  for (Produto p in listaFavoritos) {
-                                    print("${p.id} - ${p.nome}");
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  )
+             
                 : Container(),
           ),
         ],
