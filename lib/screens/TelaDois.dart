@@ -141,27 +141,28 @@ class _TelaDoisState extends State<TelaDois> {
               },
             ),
 
-            TextButton(
-              child: Text("Abrir"),
-              onPressed: () async {
-                // Fecha a janela de confirmação.
-                Navigator.of(context).pop();
+           TextButton(
+  child: Text("Abrir"),
+  onPressed: () async {
+    Navigator.of(context).pop();
 
-                // Cria o endereço do WhatsApp.
-                final Uri whatsapp = Uri.parse(
-                  'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
-                );
+    final telefone = '5537998249649';
 
-                // Verifica se o endereço pode ser aberto.
-                if (await canLaunchUrl(whatsapp)) {
-                  // Abre o WhatsApp fora do aplicativo.
-                  await launchUrl(
-                    whatsapp,
-                    mode: LaunchMode.externalApplication,
-                  );
-                }
-              },
-            ),
+    final mensagem =
+        'Olá! Tenho interesse no ${produto.nome}.';
+
+    final Uri whatsapp = Uri.parse(
+      'https://wa.me/$telefone?text=${Uri.encodeComponent(mensagem)}',
+    );
+
+    if (await canLaunchUrl(whatsapp)) {
+      await launchUrl(
+        whatsapp,
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  },
+),
           ],
         );
       },

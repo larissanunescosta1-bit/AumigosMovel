@@ -32,6 +32,16 @@ class _TelaHomeState extends State<TelaHome> {
       Sincroniza sincroniza = Sincroniza();
 
       List<Produto> produtosApi = await sincroniza.requestProdutos();
+      List<int> idsFavoritos =
+    await LocalStorageService.carregarIdsFavoritos();
+
+listaFavoritos.clear();
+
+listaFavoritos.addAll(
+  produtosApi.where(
+    (produto) => idsFavoritos.contains(produto.id),
+  ),
+);
 
       setState(() {
         produtos = produtosApi;
@@ -236,26 +246,27 @@ class _TelaHomeState extends State<TelaHome> {
                                                   },
                                                 ),
                                                 TextButton(
-                                                  child: Text("Abrir"),
-                                                  onPressed: () async {
-                                                    Navigator.of(context).pop();
+  child: Text("Abrir"),
+  onPressed: () async {
+    Navigator.of(context).pop();
 
-                                                    final Uri
-                                                    whatsapp = Uri.parse(
-                                                      'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
-                                                    );
+    final telefone = '5537998249649';
 
-                                                    if (await canLaunchUrl(
-                                                      whatsapp,
-                                                    )) {
-                                                      await launchUrl(
-                                                        whatsapp,
-                                                        mode: LaunchMode
-                                                            .externalApplication,
-                                                      );
-                                                    }
-                                                  },
-                                                ),
+    final mensagem =
+        'Olá! Tenho interesse no ${produto.nome}.';
+
+    final Uri whatsapp = Uri.parse(
+      'https://wa.me/$telefone?text=${Uri.encodeComponent(mensagem)}',
+    );
+
+    if (await canLaunchUrl(whatsapp)) {
+      await launchUrl(
+        whatsapp,
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  },
+),
                                               ],
                                             );
                                           },
@@ -437,27 +448,28 @@ class _TelaHomeState extends State<TelaHome> {
                                                     Navigator.of(context).pop();
                                                   },
                                                 ),
-                                                TextButton(
-                                                  child: Text("Abrir"),
-                                                  onPressed: () async {
-                                                    Navigator.of(context).pop();
+                                               TextButton(
+  child: Text("Abrir"),
+  onPressed: () async {
+    Navigator.of(context).pop();
 
-                                                    final Uri
-                                                    whatsapp = Uri.parse(
-                                                      'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
-                                                    );
+    final telefone = '5537998249649';
 
-                                                    if (await canLaunchUrl(
-                                                      whatsapp,
-                                                    )) {
-                                                      await launchUrl(
-                                                        whatsapp,
-                                                        mode: LaunchMode
-                                                            .externalApplication,
-                                                      );
-                                                    }
-                                                  },
-                                                ),
+    final mensagem =
+        'Olá! Tenho interesse no ${produto.nome}.';
+
+    final Uri whatsapp = Uri.parse(
+      'https://wa.me/$telefone?text=${Uri.encodeComponent(mensagem)}',
+    );
+
+    if (await canLaunchUrl(whatsapp)) {
+      await launchUrl(
+        whatsapp,
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  },
+),
                                               ],
                                             );
                                           },
@@ -639,27 +651,28 @@ class _TelaHomeState extends State<TelaHome> {
                                                     Navigator.of(context).pop();
                                                   },
                                                 ),
-                                                TextButton(
-                                                  child: Text("Abrir"),
-                                                  onPressed: () async {
-                                                    Navigator.of(context).pop();
+                                               TextButton(
+  child: Text("Abrir"),
+  onPressed: () async {
+    Navigator.of(context).pop();
 
-                                                    final Uri
-                                                    whatsapp = Uri.parse(
-                                                      'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
-                                                    );
+    final telefone = '5537998249649';
 
-                                                    if (await canLaunchUrl(
-                                                      whatsapp,
-                                                    )) {
-                                                      await launchUrl(
-                                                        whatsapp,
-                                                        mode: LaunchMode
-                                                            .externalApplication,
-                                                      );
-                                                    }
-                                                  },
-                                                ),
+    final mensagem =
+        'Olá! Tenho interesse no ${produto.nome}.';
+
+    final Uri whatsapp = Uri.parse(
+      'https://wa.me/$telefone?text=${Uri.encodeComponent(mensagem)}',
+    );
+
+    if (await canLaunchUrl(whatsapp)) {
+      await launchUrl(
+        whatsapp,
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  },
+),
                                               ],
                                             );
                                           },
@@ -843,26 +856,27 @@ class _TelaHomeState extends State<TelaHome> {
                                                   },
                                                 ),
                                                 TextButton(
-                                                  child: Text("Abrir"),
-                                                  onPressed: () async {
-                                                    Navigator.of(context).pop();
+  child: Text("Abrir"),
+  onPressed: () async {
+    Navigator.of(context).pop();
 
-                                                    final Uri
-                                                    whatsapp = Uri.parse(
-                                                      'https://wa.me/5537999999999?text=Olá!%20Tenho%20interesse%20na%20${produto.nome}.',
-                                                    );
+    final telefone = '5537998249649';
 
-                                                    if (await canLaunchUrl(
-                                                      whatsapp,
-                                                    )) {
-                                                      await launchUrl(
-                                                        whatsapp,
-                                                        mode: LaunchMode
-                                                            .externalApplication,
-                                                      );
-                                                    }
-                                                  },
-                                                ),
+    final mensagem =
+        'Olá! Tenho interesse no ${produto.nome}.';
+
+    final Uri whatsapp = Uri.parse(
+      'https://wa.me/$telefone?text=${Uri.encodeComponent(mensagem)}',
+    );
+
+    if (await canLaunchUrl(whatsapp)) {
+      await launchUrl(
+        whatsapp,
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  },
+),
                                               ],
                                             );
                                           },

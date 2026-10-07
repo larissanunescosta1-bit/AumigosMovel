@@ -29,27 +29,40 @@ class LocalStorageService {
   }
 
 // e como se fosse uma chave que é usada para identificar onde os favoritos serão salvos
+// Chave usada para salvar os favoritos
 static const String LISTA_FAVORITOS = "favoritos";
 
+// Salvar somente os IDs dos favoritos
 static Future<void> salvarFavoritos(List<Produto> favoritos) async {
   final prefs = await SharedPreferences.getInstance();
 
-  prefs.setString(
+  // Pega somente o ID de cada produto
+  List<String> ids = favoritos
+      .map((produto) => produto.id.toString())
+      .toList();
+
+  // Salva os IDs no celular
+  await prefs.setStringList(
     LISTA_FAVORITOS,
-    Produto.encode(favoritos),
+    ids,
   );
 }
 
-static Future<List<Produto>> carregarFavoritos() async {
+// Recuperar somente os IDs dos favoritos
+static Future<List<int>> carregarIdsFavoritos() async {
   final prefs = await SharedPreferences.getInstance();
- // busca os favoritos salvos usando a chave LISTA_FAVORITOS
-  String? json = prefs.getString(LISTA_FAVORITOS);
 
-  if (json == null) {
+  List<String>? idsSalvos =
+      prefs.getStringList(LISTA_FAVORITOS);
+
+  if (idsSalvos == null) {
     return [];
   }
 
-  return Produto.decode(json);
+  // Converte os IDs de String para int
+  return idsSalvos
+      .map((id) => int.parse(id))
+      .toList();
 }
 static Future<void> limparProdutos() async {
   final prefs = await SharedPreferences.getInstance();

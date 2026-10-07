@@ -32,10 +32,16 @@ class _SplashScreenState extends State<SplashScreen> {
   listaProdutos.addAll(produtosApi);
 
   // Carrega somente os favoritos salvos
-  listaFavoritos.clear();
-  listaFavoritos.addAll(
-    await LocalStorageService.carregarFavoritos(),
-  );
+ listaFavoritos.clear();
+
+List<int> idsFavoritos =
+    await LocalStorageService.carregarIdsFavoritos();
+
+listaFavoritos.addAll(
+  produtosApi.where(
+    (produto) => idsFavoritos.contains(produto.id),
+  ),
+);
 // Marca como favorito os produtos que já estavam salvos
 for (Produto produto in listaProdutos) {
   for (Produto favorito in listaFavoritos) {
