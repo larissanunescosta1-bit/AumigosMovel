@@ -100,7 +100,7 @@ class _TelaDoisState extends State<TelaDois> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                                                           Image.network(
-  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  'https://aumigoswebteste.wasmer.app/storage/${produto.imagem}',
   width: 200,
   height: 200,
   webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
@@ -205,7 +205,7 @@ class _TelaDoisState extends State<TelaDois> {
                     child: Row(
                       children: [
                           Image.network(
-  'http://127.0.0.1:8000/storage/${produto.imagem}',
+  'https://aumigoswebteste.wasmer.app/storage/${produto.imagem}',
   width: 70,
   height: 70,
   fit: BoxFit.cover,

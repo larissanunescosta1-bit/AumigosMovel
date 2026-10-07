@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import '../objects/produto.dart';
 
 class Sincroniza {
-  static String LISTAGEM_PRODUTOS = "http://127.0.0.1:8000/api/produtos";
+  static String LISTAGEM_PRODUTOS = "https://aumigoswebteste.wasmer.app/api/produtos";
 
   // Busca os produtos na API
   Future<List<Produto>> requestProdutos() async {
