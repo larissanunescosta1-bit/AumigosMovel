@@ -4,6 +4,10 @@ import 'package:flutter_application_1/modelo/objects/produto.dart';
 class LocalStorageService {
   //Constantes que indical a chava shared em que o dado será presistido
   static const String LISTA_PRODUTOS = 'lista_produtos';
+  // e como se fosse uma chave que é usada para identificar onde os favoritos serão salvos
+  // Chave usada para salvar os favoritos
+  static const String LISTA_FAVORITOS = "lista_favoritos";
+static const String IDS_FAVORITOS = "favoritos";
 
   // Salvar a lista
   static Future<void> salvarProdutos( List<Produto> lista) async {
@@ -28,12 +32,21 @@ class LocalStorageService {
     return Produto.decode(produtosJson);
   }
 
-// e como se fosse uma chave que é usada para identificar onde os favoritos serão salvos
-// Chave usada para salvar os favoritos
-static const String LISTA_FAVORITOS = "favoritos";
+// Recuperar a lista
+  static Future<List<Produto>> carregarFavoritos() async {
+
+    //  acesso ao armazenamento.
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? produtosJson = prefs.getString(LISTA_FAVORITOS);
+
+    if (produtosJson == null) return [];
+
+    //RETORNA LISTA DE PRODUTOS
+    return Produto.decode(produtosJson);
+  }
 
 // Salvar somente os IDs dos favoritos
-static Future<void> salvarFavoritos(List<Produto> favoritos) async {
+static Future<void> salvarIDsFavoritos(List<Produto> favoritos) async {
   final prefs = await SharedPreferences.getInstance();
 
   // Pega somente o ID de cada produto
@@ -43,9 +56,19 @@ static Future<void> salvarFavoritos(List<Produto> favoritos) async {
 
   // Salva os IDs no celular
   await prefs.setStringList(
-    LISTA_FAVORITOS,
+    IDS_FAVORITOS,
     ids,
   );
+}
+
+// Salvar somente os IDs dos favoritos
+static Future<void> salvarFavoritos(List<Produto> favoritos) async {
+ //instancia a classe sp
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //converte a lista de produtos em string
+    final String encodedData = Produto.encode(favoritos);
+    //Persiste o dadop
+    await prefs.setString(LISTA_FAVORITOS, encodedData);
 }
 
 // Recuperar somente os IDs dos favoritos
@@ -53,7 +76,7 @@ static Future<List<int>> carregarIdsFavoritos() async {
   final prefs = await SharedPreferences.getInstance();
 
   List<String>? idsSalvos =
-      prefs.getStringList(LISTA_FAVORITOS);
+      prefs.getStringList(IDS_FAVORITOS);
 
   if (idsSalvos == null) {
     return [];

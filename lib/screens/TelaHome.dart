@@ -7,6 +7,7 @@ import 'package:flutter_application_1/modelo/local_storage_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_application_1/modelo/api/Sincroniza.dart';
 
+
 class TelaHome extends StatefulWidget {
   const TelaHome({super.key, required this.title});
 
@@ -52,11 +53,11 @@ listaFavoritos.addAll(
         print("========== PRODUTOS ==========");
 
         for (Produto p in produtos) {
-         print("==============================");
-  print("ID: ${p.id}");
-  print("NOME: ${p.nome}");
-  print("CATEGORIA: ${p.categoria}");
-  print("IMAGEM: ${p.imagem}");
+          print("==============================");
+          print("ID: ${p.id}");
+          print("NOME: ${p.nome}");
+          print("CATEGORIA: ${p.categoria}");
+          print("IMAGEM: ${p.imagem}");
         }
 
         for (Produto p in produtos) {
@@ -225,7 +226,7 @@ listaFavoritos.addAll(
                                     SizedBox(height: 15),
 
                                     IconButton(
-                                      icon: Icon(
+                                      icon:  FaIcon(
                                         FontAwesomeIcons.whatsapp,
                                         color: Color(0xFF25D366),
                                       ),
@@ -373,6 +374,9 @@ listaFavoritos.addAll(
                                   await LocalStorageService.salvarFavoritos(
                                     listaFavoritos,
                                   );
+                                  await LocalStorageService.salvarIDsFavoritos(
+                                    listaFavoritos,
+                                  );
                                   print("FAVORITOS SALVOS:");
                                   for (Produto p in listaFavoritos) {
                                     print("${p.id} - ${p.nome}");
@@ -428,7 +432,7 @@ listaFavoritos.addAll(
                                     SizedBox(height: 15),
 
                                     IconButton(
-                                      icon: Icon(
+                                      icon:  FaIcon(
                                         FontAwesomeIcons.whatsapp,
                                         color: Color(0xFF25D366),
                                       ),
@@ -631,7 +635,7 @@ listaFavoritos.addAll(
                                     SizedBox(height: 15),
 
                                     IconButton(
-                                      icon: Icon(
+                                      icon:  FaIcon(
                                         FontAwesomeIcons.whatsapp,
                                         color: Color(0xFF25D366),
                                       ),
@@ -835,7 +839,7 @@ listaFavoritos.addAll(
                                     SizedBox(height: 15),
 
                                     IconButton(
-                                      icon: Icon(
+                                      icon:  FaIcon(
                                         FontAwesomeIcons.whatsapp,
                                         color: Color(0xFF25D366),
                                       ),

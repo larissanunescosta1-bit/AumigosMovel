@@ -18,47 +18,70 @@ class _SplashScreenState extends State<SplashScreen> {
      iniciarApp();
       
   }
+ 
   // aqui é o responsavel por carregar os dados antes de abrir a tela principal
-    Future<void> iniciarApp() async {
+  Future<void> iniciarApp() async {
        // Busca os produtos diretamente da API
-  Sincroniza api = Sincroniza();
+    Sincroniza api = Sincroniza();
 
-   List<Produto> produtosApi = await api.requestProdutos();
-
-  // Limpa a lista atual
-  listaProdutos.clear();
-
-  // Coloca os produtos que vieram da API
-  listaProdutos.addAll(produtosApi);
-
-  // Carrega somente os favoritos salvos
- listaFavoritos.clear();
-
-List<int> idsFavoritos =
-    await LocalStorageService.carregarIdsFavoritos();
-
-listaFavoritos.addAll(
-  produtosApi.where(
-    (produto) => idsFavoritos.contains(produto.id),
-  ),
-);
-// Marca como favorito os produtos que já estavam salvos
-for (Produto produto in listaProdutos) {
-  for (Produto favorito in listaFavoritos) {
-    if (produto.id == favorito.id) {
-      produto.favorito = true;
+    //V=========================
+    //BLOCO PARA BAIXAR LISTA API
+    //==========================
+    listaProdutos = await LocalStorageService.carregarProdutos();
+    if(listaProdutos == []){
+      listaProdutos = await api.requestProdutos();
+      print("pegou da API");
     }
-  }
-}
+    /*
+    //PEGO DADOS DA API
+    List<Produto> produtosApi = await api.requestProdutos();
+    // Limpa a lista LOCAL
+    listaProdutos.clear();
+    // Coloca os produtos que vieram da API
+    listaProdutos.addAll(produtosApi);
+    
+    */
+    //=======================================
+    //BLOCO PARA CARREGAR LISTA FAVORITOS
+    //=======================================
+    List<Produto> listaAux =  await LocalStorageService.carregarFavoritos();
+    listaFavoritos.clear();
+    for(Produto p in listaAux){
+      if(p.favorito)
+        listaFavoritos.add(p);
+    }
+     /*
+    // Carrega somente os favoritos salvos
+    listaFavoritos.clear();
+    List<int> idsFavoritos = await LocalStorageService.carregarIdsFavoritos();
 
-  await Future.delayed(const Duration(seconds: 3));
+    //adicionando produtos faboritos da api 
+    listaFavoritos.addAll(
+      produtosApi.where(
+        (produto) => idsFavoritos.contains(produto.id),
+      ),
+    );
+    
 
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (context) => HomePage(),
-    ),
-  );
+    //neste momento, vc marca todas os favoritos como true
+    // Marca como favorito os produtos que já estavam salvos
+    for (Produto produto in listaProdutos) {
+      for (Produto favorito in listaFavoritos) {
+        if (produto.id == favorito.id) {
+          produto.favorito = true;
+        }
+      }
+    }
+    */
+
+    await Future.delayed(const Duration(seconds: 3));
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(),
+      ),
+    );
 }
   
 
